@@ -6,7 +6,7 @@ Requires [HTSL](https://github.com/BusterBrown1218/HTSL)
 ### Optional Setup:
 > var dv/factor = velocity factor
 
-ℹ️﻿ default: 1, all positive integers
+ℹ️﻿ default: 10, all positive integers
 
 > var dv/pitch = input pitch
 > var dv/yaw = input yaw
