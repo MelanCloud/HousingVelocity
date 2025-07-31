@@ -1,0 +1,158 @@
+// Dynamic Velocity 
+
+// By: mncd (Novys)
+
+/*
+Usage
+
+1. Input
+
+Optional Settings:
+    var dv/factor (Default: 10)
+    var dv/pitch  (Default: %player.location.pitch%)
+    var dv/yaw  (Default: %player.location.yaw%)
+    var dv/yDamp  (Default: 1) = y dampening factor
+        1 : y velocity not cut
+        2 : y velocity cut 1/2
+        3 : y velocity cut 1/3
+
+2. Run Function
+
+3. Output: dv/x, dv/y, dv/z (for velocity action)
+changeVelocity %var.player/dv/x 0% %var.player/dv/y 0% %var.player/dv/z 0%
+*/
+
+// goto function "Dynamic Velocity"
+
+// defaults
+if (var dv/pitch == 0 0) {
+    var dv/pitch = %player.location.pitch%
+}
+if (var dv/yaw == 0 0) {
+    var dv/yaw = %player.location.yaw%
+}
+
+if () {
+// calculate sin(pitch) and cos(pitch)
+    globalvar temp = var dv/pitch 0
+    globalvar temp *= 1000
+    var sinPitch = globalvar temp 0
+    globalvar temp *= globalvar temp 0
+    var cosPitch = 1000
+    globalvar temp /= 8100000
+    var cosPitch -= globalvar temp 0
+    globalvar temp *= var sinPitch 0
+    globalvar temp /= 3000
+    var sinPitch -= globalvar temp 0
+    var sinPitch /= -60
+}
+
+if () {
+// calculate sin(yaw)
+    var sinInput = var dv/yaw 0
+    var sinInput *= 1000
+    var sinInput += 4611686018427360000
+    var temp = var sinInput 0
+    var temp /= 360000
+    var temp *= 360000
+    var sinInput -= var temp 0
+    var sinInput -= 180000
+    globalvar temp = var sinInput 0
+    globalvar temp += 180001
+    globalvar temp /= 180001
+    globalvar temp *= 2
+    globalvar temp -= 1
+    var sinInput *= globalvar temp 0
+    globalvar temp *= -1
+    var temp = 179968
+}
+if () {
+    var temp -= var sinInput 0
+    var temp *= var sinInput 0
+    var sinYaw = 4005
+    var sinYaw *= var temp 0
+    // var sinInput used as temp var
+    var sinInput = 40500000000
+    var sinInput -= var temp 0
+    var sinYaw /= var sinInput 0
+    var sinYaw *= globalvar temp 0
+
+// calculate cos(yaw)
+    var cosInput = var dv/yaw 0
+    var cosInput *= 1000
+}
+if () {
+    var cosInput += 4611686018427450000
+    var temp = var cosInput 0
+    var temp /= 360000
+    var temp *= 360000
+    var cosInput -= var temp 0
+    var cosInput -= 180000
+    globalvar temp = var cosInput 0
+    globalvar temp += 180001
+    globalvar temp /= 180001
+    globalvar temp *= 2
+    globalvar temp -= 1
+    var cosInput *= globalvar temp 0
+    globalvar temp *= -1
+    var temp = 179968
+    var temp -= var cosInput 0
+    var temp *= var cosInput 0
+}
+if () {
+    var cosYaw = 4005
+    var cosYaw *= var temp 0
+    var sinInput = 40500000000
+    var sinInput -= var temp
+    var cosYaw /= var sinInput 0
+    var cosYaw *= globalvar temp 0
+
+// cleanup
+    var dv/pitch Unset
+    var dv/yaw Unset
+    var sinInput Unset
+    var cosInput Unset
+
+// construct look vector
+    globalvar lookY = var sinPitch 0
+
+    globalvar lookX = var cosPitch 0
+    globalvar lookX *= var sinYaw 0
+    globalvar lookX /= 1000
+    
+    globalvar lookZ = var cosPitch 0
+    globalvar lookZ *= var cosYaw 0
+    globalvar lookZ /= 1000
+}
+
+if () {
+// final velocity
+    var dv/x = globalvar lookX 0
+    var dv/x *= var dv/factor 10
+    var dv/x /= -1000
+
+    globalvar temp = var dv/factor 10
+    globalvar temp /= var dv/yDamp 1
+    var dv/y = globalvar lookY 0
+    var dv/y *= globalvar temp 0
+    var dv/y /= 1000
+
+    var dv/z = globalvar lookZ 0
+    var dv/z *= var dv/factor 10
+    var dv/z /= 1000
+}
+
+if () {
+// cleanup
+    var dv/factor Unset
+    var lookX Unset
+    var lookY Unset
+    var lookZ Unset
+    var temp Unset
+    globalvar temp Unset
+    var sinPitch Unset
+    var sinYaw Unset
+    var cosPitch Unset
+    var cosYaw Unset
+    var dv/yDamp Unset
+}
